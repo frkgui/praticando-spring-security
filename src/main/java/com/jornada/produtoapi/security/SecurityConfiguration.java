@@ -20,7 +20,9 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(Customizer.withDefaults());
         // Definindo permissão de acesso (autenticação).
-        http.authorizeHttpRequests((authz) -> authz.anyRequest().authenticated());
+        http.authorizeHttpRequests((authz) ->
+                authz.requestMatchers("/autenticacao/**").permitAll()
+                .anyRequest().authenticated());
 
         return http.build();
     }
