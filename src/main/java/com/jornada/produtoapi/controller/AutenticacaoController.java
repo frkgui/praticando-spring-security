@@ -23,7 +23,6 @@ public class AutenticacaoController {
 
     @PostMapping("/login")
     public String fazerLogin(@RequestBody AutenticacaoDTO autenticacaoDTO) throws BusinessException {
-
         return usuarioService.fazerLogin(autenticacaoDTO);
     }
 

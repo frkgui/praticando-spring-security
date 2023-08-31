@@ -17,7 +17,8 @@ public class UsuarioService {
 
 
     public String fazerLogin(AutenticacaoDTO autenticacaoDTO) throws BusinessException {
-       Optional<UsuarioEntity> usuarioEntityOptional = usuarioRepository.findByLoginAndSenha(autenticacaoDTO.getLogin(), autenticacaoDTO.getSenha());
+
+        Optional<UsuarioEntity> usuarioEntityOptional = usuarioRepository.findByLoginAndSenha(autenticacaoDTO.getLogin(), autenticacaoDTO.getSenha());
 
        if(usuarioEntityOptional.isEmpty()){
            throw new BusinessException("Usuario ou senha inválidos!");
@@ -27,6 +28,17 @@ public class UsuarioService {
 
        return tokenGerado;
 
+    }
+
+    // Método de validação de Token -> TokenAuthentication
+    public UsuarioEntity validarToken(String token) throws BusinessException {
+        if(token == null){
+            throw new BusinessException("Token inválido!");
+        }
+        String tokenClean = token.replace("Bearer", "");
+        String[] usuarioESenha = tokenClean.split("-");
+        Optional<UsuarioEntity> usuarioEntityOptional = usuarioRepository.findByLoginAndSenha(usuarioESenha[0], usuarioESenha[1]);
+        return usuarioEntityOptional.orElseThrow(() -> new BusinessException("Usuário e senha inválidos!"));
     }
 
 }
